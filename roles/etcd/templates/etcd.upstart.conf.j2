@@ -1,0 +1,20 @@
+description "etcd - A key value store for shared configuration and service discovery"
+author "CoreOS"
+
+start on filesystem or runlevel [2345]
+stop on runlevel [S016]
+
+script 
+  source /etc/default/etcd
+  echo $$ > /var/run/etcd.pid
+  exec /usr/local/bin/etcd $DAEMON_ARGS 1>>/var/log/etcd.log 2>&1 
+end script
+
+pre-start script
+  echo "[`date`] Starting etcd .. " >> /var/log/etcd.log
+end script
+
+pre-stop script
+  rm /var/run/etcd.pid
+  echo "[`date`] Stopping etcd .. " >> /var/log/etcd.log
+end script

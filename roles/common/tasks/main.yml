@@ -1,27 +1,15 @@
 ---
-- name: Determine if Atomic
-  command: "grep Atomic /etc/redhat-release"
-  register: is_atomic
+- name: Determine if Centos 6 
+  shell: "grep 'CentOS release 6' /etc/redhat-release"
+  register: is_centos6
   ignore_errors: yes
   changed_when: false
 
-- name: Determine if RHEL7
-  shell: "grep 'Red Hat Enterprise Linux.*release 7' /etc/redhat-release"
-  register: is_rhel7
+- name: Determine if RHEL 6
+  shell: "grep 'Red Hat Enterprise Linux.*release 6' /etc/redhat-release"
+  register: is_rhel6
   ignore_errors: yes
   changed_when: false
 
-- include: rhel7_repos.yml
-  when: is_rhel7.rc == 0 and is_atomic.rc != 0
-
-- name: Determine if firewalld installed
-  command: "rpm -q firewalld"
-  register: has_firewalld
-  ignore_errors: yes
-  changed_when: false
-
-- name: Determine if iptables-services installed
-  command: "rpm -q iptables-services"
-  register: has_iptables
-  ignore_errors: yes
-  changed_when: false
+- fail: msg="this playbook only supports RHEL 6.x/Centos 6.x !" 
+  when: is_centos6.rc != 0 and is_rhel6.rc != 0

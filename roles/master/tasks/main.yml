@@ -6,6 +6,13 @@
           - restart controller-manager
           - restart scheduler
 
+- name: write the upstart conf files for master components
+  template: src={{ item.bin }}.upstart.conf.j2 dest=/etc/init/{{ item.bin }}.conf 
+  with_items:
+          - { bin: 'kube-apiserver' }
+          - { bin: 'kube-controller-manager' }
+          - { bin: 'kube-scheduler' }
+
 - name: write the config file for controller-manager
   copy: src=controller-manager dest=/etc/kubernetes/controller-manager
   notify:
@@ -24,9 +31,3 @@
 
 - name: Enable scheduler
   service: name=kube-scheduler enabled=yes state=started
-
-- include: firewalld.yml
-  when: has_firewalld.rc == 0
-
-- include: iptables.yml
-  when: has_firewalld.rc != 0 and has_iptables.rc == 0

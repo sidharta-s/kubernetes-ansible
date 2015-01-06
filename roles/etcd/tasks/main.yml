@@ -1,20 +1,37 @@
 ---
-- include: fedora.yml
-  when: is_rhel7.rc != 0
+- name: Download etcd
+  get_url: url=https://github.com/coreos/etcd/releases/download/{{ etcd_version }}/etcd-{{ etcd_version }}-linux-amd64.tar.gz dest=/tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz 
 
-- include: rhel7.yml
-  when: is_rhel7.rc == 0
+- name: Extract ectd 
+  unarchive:  src=/tmp/etcd-{{ etcd_version }}-linux-amd64.tar.gz  dest=/usr/local/src/ copy=no 
+
+- name: Symlinks
+  file: src=/usr/local/src/etcd-{{ etcd_version }}-linux-amd64/{{ item.bin }} dest=/usr/local/bin/{{ item.bin }} state=link
+  with_items:
+          - { bin: 'etcd' }
+          - { bin: 'etcdctl' }
+
+- name: Copy upstart job configuration 
+  template: src=etcd.upstart.conf.j2 dest=/etc/init/etcd.conf mode=0644 
+  notify:
+        - restart etcd
+
+- name: Create directories
+  file: path={{ item.path }} state=directory mode={{ item.mode }}
+  with_items:
+          - { path: '/etc/default', mode: '0700' }
+          - { path: '/etc/etcd', mode: '0755' }
+          - { path: '/var/etcd', mode: '0700' }
 
 - name: Write etcd global config file
-  template: src=etcd.conf.j2 dest=/etc/etcd/etcd.conf
+  template: src=etcd.conf.basic.j2 dest=/etc/etcd/etcd.conf
+  notify:
+        - restart etcd
+
+- name: Write etcd default daemon args 
+  template: src=default.j2 dest=/etc/default/etcd
   notify:
         - restart etcd
 
 - name: Enable etcd
   service: name=etcd enabled=yes state=started
-
-- include: firewalld.yml
-  when: has_firewalld.rc == 0
-
-- include: iptables.yml
-  when: has_firewalld.rc != 0 and has_iptables.rc == 0

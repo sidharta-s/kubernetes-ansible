@@ -1,0 +1,20 @@
+description "Kubernetes Proxy"
+
+start on filesystem or runlevel [2345]
+stop on runlevel [S016]
+
+script 
+  source /etc/kubernetes/config
+  source /etc/kubernetes/proxy
+  echo $$ > /var/run/kube-proxy.pid
+  exec /usr/local/bin/kube-proxy ${KUBE_LOGTOSTDERR} ${KUBE_LOG_LEVEL} ${KUBE_ETCD_SERVERS} ${KUBE_PROXY_ARGS} 1>>/var/log/kube-proxy.log 2>&1 
+end script
+
+pre-start script
+  echo "[`date`] Starting kube-proxy .. " >> /var/log/kube-proxy.log
+end script
+
+pre-stop script
+  rm /var/run/kube-proxy.pid
+  echo "[`date`] Stopping kube-proxy .. " >> /var/log/kube-proxy.log
+end script

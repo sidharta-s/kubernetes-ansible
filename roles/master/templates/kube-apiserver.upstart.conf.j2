@@ -1,0 +1,20 @@
+description "Kubernetes API Server"
+
+start on filesystem or runlevel [2345]
+stop on runlevel [S016]
+
+script 
+  source /etc/kubernetes/config
+  source /etc/kubernetes/apiserver
+  echo $$ > /var/run/kube-apiserver.pid
+  exec /usr/local/bin/kube-apiserver ${KUBE_LOGTOSTDERR} ${KUBE_LOG_LEVEL} ${KUBE_ETCD_SERVERS} ${KUBE_API_ADDRESS} ${KUBE_API_PORT} ${KUBELET_PORT} ${KUBE_ALLOW_PRIV} ${KUBE_SERVICE_ADDRESSES} ${KUBE_API_ARGS} 1>>/var/log/kube-apiserver.log 2>&1 
+end script
+
+pre-start script
+  echo "[`date`] Starting kube-apiserver .. " >> /var/log/kube-apiserver.log
+end script
+
+pre-stop script
+  rm /var/run/kube-apiserver.pid
+  echo "[`date`] Stopping kube-apiserver .. " >> /var/log/kube-apiserver.log
+end script

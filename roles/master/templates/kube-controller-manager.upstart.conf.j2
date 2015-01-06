@@ -1,0 +1,21 @@
+description "Kubernetes Controller Manager"
+
+start on filesystem or runlevel [2345]
+stop on runlevel [S016]
+
+script 
+  source /etc/kubernetes/config
+  source /etc/kubernetes/apiserver
+  source /etc/kubernetes/controller-manager
+  echo $$ > /var/run/kube-controller-manager.pid
+  exec /usr/local/bin/kube-controller-manager ${KUBE_LOGTOSTDERR} ${KUBE_LOG_LEVEL} ${KUBELET_ADDRESSES} ${KUBE_MASTER} ${KUBE_CONTROLLER_MANAGER_ARGS} 1>>/var/log/kube-controller-manager.log 2>&1 
+end script
+
+pre-start script
+  echo "[`date`] Starting kube-controller-manager .. " >> /var/log/kube-controller-manager.log
+end script
+
+pre-stop script
+  rm /var/run/kube-controller-manager.pid
+  echo "[`date`] Stopping kube-controller-manager .. " >> /var/log/kube-controller-manager.log
+end script

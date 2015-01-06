@@ -1,9 +1,30 @@
 ---
-- include: fedora.yml
-  when: is_rhel7.rc != 0
+- name: Download kubernetes archive 
+  get_url: url=https://github.com/GoogleCloudPlatform/kubernetes/releases/download/{{ kubernetes_version }}/kubernetes.tar.gz dest=/tmp/kubernetes-{{ kubernetes_version }}.tar.gz 
 
-- include: rhel7.yml
-  when: is_rhel7.rc == 0
+- name: Create directories for archive extraction/configuration/data storage etc
+  file: path={{ item.path }} state=directory mode={{ item.mode }}
+  with_items:
+          - { path: '/tmp/kubernetes-{{ kubernetes_version }}', mode: '0700' }
+          - { path: '/usr/local/src/kubernetes-{{ kubernetes_version }}', mode: '0700' }
+          - { path: '/etc/kubernetes', mode: '0700' }
+
+- name: Extract kubernetes archive 
+  unarchive:  src=/tmp/kubernetes-{{ kubernetes_version }}.tar.gz  dest=/tmp/kubernetes-{{ kubernetes_version }} copy=no 
+- name: Extract kubernetes binaries 
+  unarchive:  src=/tmp/kubernetes-{{ kubernetes_version }}/kubernetes/server/kubernetes-server-linux-amd64.tar.gz  dest=/usr/local/src/kubernetes-{{ kubernetes_version }} copy=no 
+
+- name: Set up symlinks to kube binaries
+  file: src=/usr/local/src/kubernetes-{{ kubernetes_version }}/kubernetes/server/bin/{{ item.bin }} dest=/usr/local/bin/{{ item.bin }} state=link
+  with_items:
+          - { bin: 'kube-apiserver' }
+          - { bin: 'kube-controller-manager' }
+          - { bin: 'kubecfg' }
+          - { bin: 'kubectl' }
+          - { bin: 'kubelet' }
+          - { bin: 'kube-proxy' }
+          - { bin: 'kubernetes' }
+          - { bin: 'kube-scheduler' }
 
 - name: write the global config file
   template: src=config.j2 dest=/etc/kubernetes/config
