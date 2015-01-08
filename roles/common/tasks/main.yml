@@ -11,5 +11,11 @@
   ignore_errors: yes
   changed_when: false
 
+- name: Download and install epel package
+  yum: name=http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
+
+- name: Fix epel repo file to use http instead of https
+  shell: "sed -i 's/mirrorlist=https/mirrorlist=http/' /etc/yum.repos.d/epel.repo"
+
 - fail: msg="this playbook only supports RHEL 6.x/Centos 6.x !" 
   when: is_centos6.rc != 0 and is_rhel6.rc != 0

@@ -1,6 +1,6 @@
 ---
 - name: make sure docker is installed
-  yum: pkg=docker-io state=latest
+  yum: pkg=docker-io enablerepo=epel state=latest
   notify:
           - restart docker 
 
