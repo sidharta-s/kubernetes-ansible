@@ -1,4 +1,7 @@
 ---
+- name: Install bridge utils
+  yum: name=bridge-utils state=latest
+
 - name: Create kubernetes bridge interface
   template: src=ifcfg-kubernetes-bridge.j2 dest=/etc/sysconfig/network-scripts/ifcfg-kubernetes-bridge
   notify: restart network service
