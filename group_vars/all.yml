@@ -1,6 +1,10 @@
 ansible_ssh_user: root
+
 etcd_version: v0.4.6
-kubernetes_version: v0.7.2
+kubernetes_version: v0.8.0
+
 kube_service_addresses: 10.246.0.0/16
 kube_overlay_ip: 4.0.0.0
 kube_overlay_prefix: 16
+routing_network_interface: eth0
+ansible_routing_network_interface: ansible_eth0

@@ -1,24 +1,27 @@
 ---
-- name: write the config files for api server
+- debug: var=hostvars[groups['masters'][0]]
+- debug: var=hostvars[groups['minions'][0]]
+
+- name: Write the config files for api server
   template: src=apiserver.j2 dest=/etc/kubernetes/apiserver
   notify:
           - restart apiserver
           - restart controller-manager
           - restart scheduler
 
-- name: write the upstart conf files for master components
+- name: Write the upstart conf files for master components
   template: src={{ item.bin }}.upstart.conf.j2 dest=/etc/init/{{ item.bin }}.conf 
   with_items:
           - { bin: 'kube-apiserver' }
           - { bin: 'kube-controller-manager' }
           - { bin: 'kube-scheduler' }
 
-- name: write the config file for controller-manager
+- name: Write the config file for controller-manager
   copy: src=controller-manager dest=/etc/kubernetes/controller-manager
   notify:
           - restart controller-manager
 
-- name: write the config file for scheduler
+- name: Write the config file for scheduler
   copy: src=scheduler dest=/etc/kubernetes/scheduler
   notify:
           - restart scheduler

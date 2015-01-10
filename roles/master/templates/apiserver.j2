@@ -11,11 +11,14 @@ KUBE_API_ADDRESS="--address=0.0.0.0"
 KUBE_API_PORT="--port=8080"
 
 # How the replication controller and scheduler find the apiserver
-KUBE_MASTER="--master={{ groups['masters'][0] }}:8080"
+KUBE_MASTER="--master={{ hostvars[groups['masters'][0]][ansible_routing_network_interface]['ipv4']['address'] }}:8080"
 
 # Comma seperated list of minions
-KUBELET_ADDRESSES="--machines={{ groups['minions']|join(',') }}"
-
+KUBELET_ADDRESSES="--machines={% set comma = joiner(",") %}
+                              {%- for host in groups['minions'] -%}
+                                {{ comma() }}{{ hostvars[host][ansible_routing_network_interface]['ipv4']['address'] }}
+                              {%- endfor %}"
+  
 # Port minions listen on
 KUBELET_PORT="--kubelet_port=10250"
 

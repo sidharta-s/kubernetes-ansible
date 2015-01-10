@@ -8,6 +8,7 @@
 # You can also comment out the "vars" section and use --ask-pass on the command
 # line.
 #
+# In case you have a pem file available, specify ansible_ssh_private_key_file instead 
 # All ansible modules will fail if the host is not in the ssh known_hosts.
 # Normally ansible just asks if the host key is acceptable.  BUT when using
 # password instead of public key authentication it will not ask and will instead
@@ -26,6 +27,7 @@
 - hosts: all
   vars:
           ansible_ssh_pass: "{{ lookup('file', '~/rootpassword') }}"
+          #ansible_ssh_private_key_file: <pem_file_location> 
   tasks:
           - name: Push rsa public key to all machines
             authorized_key: user={{ ansible_ssh_user }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

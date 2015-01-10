@@ -10,7 +10,7 @@
 #   kubernetes-proxy.service
 
 # Comma seperated list of nodes in the etcd cluster
-KUBE_ETCD_SERVERS="--etcd_servers=http://{{ groups['etcd'][0] }}:4001"
+KUBE_ETCD_SERVERS="--etcd_servers=http://{{ hostvars[groups['etcd'][0]][ansible_routing_network_interface]['ipv4']['address'] }}:4001"
 
 # logging to stderr means we get it in the systemd journal
 KUBE_LOGTOSTDERR="--logtostderr=true"

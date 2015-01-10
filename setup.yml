@@ -1,20 +1,25 @@
 ---
-- hosts: etcd
+# Running "common" tasks first forces fact gathering before etcd/kubernetes setup.
+# This ensures we have all the hosts' info available for configuration in later stages (e.g master)
+
+- hosts: all
   sudo: yes
   roles:
           - common
+
+- hosts: etcd
+  sudo: yes
+  roles:
           - etcd
 
 - hosts: masters
   sudo: yes
   roles:
-          - common
           - kubernetes
           - master
 
 - hosts: minions
   sudo: yes
   roles:
-          - common
           - kubernetes
           - minion
