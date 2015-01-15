@@ -2,12 +2,12 @@
 - hosts: etcd
   sudo: yes
   roles:
-          - flannel-config
+          - etcd
 
-- hosts: masters
+- hosts: etcd
   sudo: yes
   roles:
-          - flannel
+          - flannel-config
 
 - hosts: minions
   sudo: yes

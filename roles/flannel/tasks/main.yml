@@ -1,19 +1,26 @@
 ---
-- name: Install nhorman Flannel yum repo file
-  copy: src=flannel.repo dest=/etc/yum.repos.d/
+- name: "HACK: Stop iptables"
+  service: name=iptables state=stopped 
 
-- name: Install flannel
-  yum: name=flannel state=latest
+- name: Extract flanneld 
+  unarchive: src=flanneld-v0.2.0.tar.gz dest=/usr/local/src/
+
+- name: Create symlink for flanneld
+  file: src=/usr/local/src/flanneld-v0.2.0/flanneld dest=/usr/local/bin/flanneld state=link
+
+- name: Create /var/run/flannel
+  file: path=/var/run/flannel state=directory mode=0700
 
 - name: Install Flannel config file
   template: src=flanneld.j2 dest=/etc/sysconfig/flanneld
   notify:
           - restart flannel
 
+- name: Install Flannel upstart configuration file
+  template: src=flanneld.upstart.conf.j2 dest=/etc/init/flanneld.conf
+
 - name: Launch Flannel
   service: name=flanneld state=started enabled=yes
 
-- name: Install HACKY docker.service file
-  copy: src=docker.service dest=/etc/systemd/system/
-  notify:
-          - restart docker
+- name: Install Docker config file
+  copy: src=docker dest=/etc/sysconfig/docker

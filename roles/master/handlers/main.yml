@@ -15,5 +15,3 @@
 - name: restart scheduler
   service: name=kube-scheduler state=restarted
 
-- name: restart iptables
-  service: name=iptables state=restarted

@@ -1,0 +1,19 @@
+description "Flannel Daemon - Overlay network for Kubernetes"
+
+start on filesystem or runlevel [2345]
+stop on runlevel [S016]
+
+script 
+  source /etc/sysconfig/flanneld
+  echo $$ > /var/run/flanneld.pid
+  exec /usr/local/bin/flanneld ${FLANNEL_ETCD} ${FLANNEL_ETCD_PREFIX} ${FLANNEL_OPTIONS} 1>>/var/log/flanneld.log 2>&1 
+end script
+
+pre-start script
+  echo "[`date`] Starting flanneld .. " >> /var/log/flanneld.log
+end script
+
+pre-stop script
+  rm /var/run/flanneld.pid
+  echo "[`date`] Stopping flanneld .. " >> /var/log/flanneld.log
+end script

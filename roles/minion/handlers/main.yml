@@ -14,12 +14,6 @@
 - name: restart proxy
   service: name=kube-proxy state=restarted
 
-- name: restart iptables
-  service: name=iptables state=restarted
-
 - name: restart docker
   service: name=docker state=restarted
 
-# OK, so it really reboots, sue me
-- name: restart network
-  command: shutdown -r now

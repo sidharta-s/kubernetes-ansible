@@ -1,0 +1,2 @@
+source /var/run/flannel/subnet.env 
+other_args="--bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU} --iptables=false"

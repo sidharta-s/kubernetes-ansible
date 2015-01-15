@@ -1,13 +1,10 @@
 [masters]
-10.11.7.227
+10.0.0.1
 
 [etcd]
-10.11.7.227
+10.0.0.2
 
 [minions]
-10.11.7.225 kube_ip_addr=10.244.1.1
-10.11.7.226 kube_ip_addr=10.244.2.1
-
-[minions:vars]
-routing_network_interface=eth0
-ansible_routing_network_interface=ansible_eth0
+10.0.0.3	kube_ip_addr=10.0.1.1
+10.0.0.4	kube_ip_addr=10.0.2.1
+10.0.0.5	kube_ip_addr=10.0.3.1
