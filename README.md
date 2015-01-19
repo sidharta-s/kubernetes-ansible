@@ -34,6 +34,7 @@ On the cluster where Kubernetes is being setup:
 
 1. edit `group_vars/all.yml` to setup/change default settings. Ensure'fake' IP addresses are specified for use with Kubernetes services. This range of IPs shouldn't conflict with anything already in use in your network infrastructure. 
 2. run `ansible-playbook -i inventory flannel.yml setup.yml` . This will install and bring up all Kubernetes components. 
+
 ## Interacting with the Kubernetes cluster
 
 1. Download and extract a Kubernetes release archive corresponding to the version installed on the cluster. See [here](https://github.com/GoogleCloudPlatform/kubernetes/releases) for a list of releases. 
