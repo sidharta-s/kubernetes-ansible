@@ -9,7 +9,8 @@
 # line.
 #
 # In case you have a pem file available, specify ansible_ssh_private_key_file instead 
-# All ansible modules will fail if the host is not in the ssh known_hosts.
+#
+## All ansible modules will fail if the host is not in the ssh known_hosts.
 # Normally ansible just asks if the host key is acceptable.  BUT when using
 # password instead of public key authentication it will not ask and will instead
 # fail.
