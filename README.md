@@ -1,6 +1,6 @@
 # Ansible Playbooks for setting up Kubernetes on CentOS 6.6/RHEL 6.6
 
-A modified fork of [eparis' Fedora/RHEL 7 playbooks](https://github.com/eparis/kubernetes-ansible) that supports setting up Kubernetes on CentOS 6.6/RHEL 6.6 , with a [flannel](https://github.com/coreos/flannel)-based overlay network. These playbooks do not use RPMs for Kubernetes/etcd. Instead they download release archives directly from github. Please note that these playbook are a work in progress and there are several imporvements still to be made.  
+A modified fork of [eparis' Fedora/RHEL 7 playbooks](https://github.com/eparis/kubernetes-ansible) that supports setting up Kubernetes on CentOS 6.6/RHEL 6.6 , with a [flannel](https://github.com/coreos/flannel)-based overlay network. These playbooks do not use RPMs for Kubernetes/etcd. Instead they download release archives directly from github. Please note that these playbooks are a work in progress and there are several imporvements still to be made.  
 
 ## Requirements
 
@@ -33,7 +33,7 @@ On the cluster where Kubernetes is being setup:
 ### Setting up Kubernetes
 
 1. edit `group_vars/all.yml` to setup/change default settings. Ensure'fake' IP addresses are specified for use with Kubernetes services. This range of IPs shouldn't conflict with anything already in use in your network infrastructure. 
-2. run `ansible-playbook -i inventory flannel.yml setup.yml` . This will install and bring up all Kubernetes components. 
+2. run `ansible-playbook -i inventory flannel.yml setup.yml` . This will install and bring up Kubernetes components (`cadvisor` setup is not in place yet) 
 
 ## Interacting with the Kubernetes cluster
 
