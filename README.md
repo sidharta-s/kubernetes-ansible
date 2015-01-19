@@ -38,22 +38,19 @@ On the cluster where Kubernetes is being setup:
 ## Interacting with the Kubernetes cluster
 
 1. Download and extract a Kubernetes release archive corresponding to the version installed on the cluster. See [here](https://github.com/GoogleCloudPlatform/kubernetes/releases) for a list of releases. 
-2. Use the `kubecfg` binary to talk to the API master. Some examples : 
-
+2. Use the `kubectl` binary to talk to the API master. Some examples : 
 
 ```
-$ kubernetes/bin/platforms/darwin/amd64/kubecfg -h=172.22.113.46:8080 list minions
-Minion identifier   Labels
-----------          ----------
-192.168.96.95
-192.168.96.96
-192.168.96.97
-192.168.96.98
-
-$ kubernetes/bin/platforms/darwin/amd64/kubecfg -h=172.22.113.46:8080 list services
-Name                Labels                                    Selector            IP                  Port
-----------          ----------                                ----------          ----------          ---------
-kubernetes-ro       component=apiserver,provider=kubernetes                       10.246.192.168      80
-kubernetes          component=apiserver,provider=kubernetes                       10.246.90.4         443
+$ kubernetes/bin/platforms/darwin/amd64/kubectl get nodes -s 172.22.113.46:8080
+NAME                LABELS
+192.168.96.98       <none>
+192.168.96.95       <none>
+192.168.96.96       <none>
+192.168.96.97       <none>
+$ kubernetes/bin/platforms/darwin/amd64/kubectl get services -s 172.22.113.46:8080
+NAME                LABELS                                    SELECTOR            IP                  PORT
+kubernetes-ro       component=apiserver,provider=kubernetes   <none>              10.246.192.168      80
+kubernetes          component=apiserver,provider=kubernetes   <none>              10.246.90.4         443
+$
 ```
 
