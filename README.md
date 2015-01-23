@@ -5,7 +5,8 @@ A modified fork of [eparis' Fedora/RHEL 7 playbooks](https://github.com/eparis/k
 ## Requirements
 
 ### 'Control' host
-On a host designated to 'manage' the cluster (could be your laptop): 
+On a host designated to 'manage' the cluster (could be your laptop):
+ 
 1. install git, sshpass and ansible (1.8.2+) 
 2. clone this repo 
 
@@ -27,7 +28,7 @@ On the cluster where Kubernetes is being setup:
 1. Specify the root password in `~/rootpassword` (Alternatively, you can provide a pem file - edit `keys.yml` accordingly) 
 2. Host Key Checking : In order to avoid an 'interactive' setup, all the host keys need to already be in the `known_hosts` file. If you have never accessed these hosts before :
    * You can configure ansible to bypass host key checking. See [here](http://docs.ansible.com/intro_getting_started.html#host-key-checking) for more information. 
-   * run `ansible-playbook -i inventory ping.yml`. This will look like it fails. See keys.yml for an explanation and other options.  
+   * Alternatively, run `ansible-playbook -i inventory ping.yml`. This will look like it fails. See keys.yml for an explanation and other options.  
 3. If necessary, generate an RSA key-pair (use `ssh-keygen`) and ensure that the public key file is located in `~/.ssh/id_rsa.pub`. Push your public key to all hosts by running : `ansible-playbook -i inventory keys.yml`
 
 ### Setting up Kubernetes
