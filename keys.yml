@@ -30,5 +30,8 @@
           ansible_ssh_pass: "{{ lookup('file', '~/rootpassword') }}"
           #ansible_ssh_private_key_file: <pem_file_location> 
   tasks:
+          - name: install selinux python libs
+            yum: name=libselinux-python state=present
+
           - name: Push rsa public key to all machines
             authorized_key: user={{ ansible_ssh_user }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
